@@ -1,21 +1,48 @@
 import "../css/Post.css"
+import styled from "styled-components"
+
+ const Conteiner = styled.div`
+    width:31rem;
+    height:auto;
+    background-color:red;
+  `
+ 
+  const Image = styled.div`
+    width:auto;
+    height:30rem;
+    background-size: cover;
+    background-repeat: no-repeat 
+  `
+
 function Post({item}) {
+
  
   return (
-   <div className="conteiner-post" key={item.id}>
+   <Conteiner key={item.id}>
+        <Image
+          style={{
+            "backgroundImage": `url(${item.urls.small})`
+          }}      
+        />
 
-        <div className="image" style={{
-            "backgroundImage": `url(${item.urls.small})`,
-             "width":"30rem",
-             "height":"30rem",
-             "backgroundSize": "cover"
-        }}>
-
-        </div>
         <div>
+          <div>
             <p>{item.alt_description}</p>
+          </div>
+
+          <div>
+            <p>Likes: {item.likes}</p>
+          </div>
+
+          <div>
+            <p>UserName: {item.user.username}</p>
+          </div>
         </div>
-   </div>
+       
+
+   </Conteiner>
+
+
   )
 }
 
