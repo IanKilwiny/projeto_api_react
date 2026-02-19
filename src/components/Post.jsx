@@ -1,24 +1,41 @@
 import "../css/Post.css"
 import styled from "styled-components"
+import { useNavigate } from "react-router-dom"
 
  const Conteiner = styled.div`
-    width:31rem;
-    height:auto;
-    background-color:red;
+  width: 100%;
+  max-width: 31rem;
+  background-color: #1e1e1e;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  }
   `
  
   const Image = styled.div`
-    width:auto;
-    height:30rem;
-    background-size: cover;
-    background-repeat: no-repeat 
+  width: 100%;
+  height: 30rem;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   `
 
 function Post({item}) {
 
+  const navigate = useNavigate()
+
+  const handleClick = () => {
+    navigate(`/photo/${item.id}`)
+  }
+
  
   return (
-   <Conteiner key={item.id}>
+   <Conteiner onClick={handleClick}>
         <Image
           style={{
             "backgroundImage": `url(${item.urls.small})`
@@ -31,16 +48,18 @@ function Post({item}) {
           </div>
 
           <div>
-            <p>Likes: {item.likes}</p>
+            <p>❤️ {item.likes}</p>
           </div>
 
           <div>
-            <p>UserName: {item.user.username}</p>
+            <p>👤 {item.user.username}</p>
           </div>
         </div>
        
 
    </Conteiner>
+
+   
 
 
   )
