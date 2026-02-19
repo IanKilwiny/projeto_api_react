@@ -1,0 +1,8 @@
+/*Tirei o width e o height*/
+.conteiner-post{
+    background-color: green;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+}
