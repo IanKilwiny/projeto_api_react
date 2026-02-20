@@ -1,15 +1,28 @@
 import { useEffect, useState } from 'react'
 import Post from './Post'
+import styled from 'styled-components'
+
+
+const Conteiner = styled.div`
+    width: 100%;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    max-width: 1200px;
+    margin: 2rem auto; /* centraliza e cria espaço */
+`
 
 function Home() {
   const [apiData, setData] = useState([])
 
-  const API_URL = import.meta.env.VITE_API_URL
   const API_KEY = import.meta.env.VITE_API_KEY
 
   useEffect(()=>{
 
-    fetch(`${API_URL}`,{
+    fetch("https://api.unsplash.com/photos/",{
       headers:{
         "Authorization": `Client-ID ${API_KEY}`
       }
@@ -37,11 +50,11 @@ function Home() {
 
   return (
     
-   <div className='home'>
+   <Conteiner className='home'>
       {apiData && apiData.map((item)=>(
         <Post item={item}/>
       ))}
-   </div>
+   </Conteiner>
   )
 }
 

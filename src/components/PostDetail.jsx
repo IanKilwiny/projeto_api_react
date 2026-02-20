@@ -1,7 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import '../css/Post.css'
 
 const Container = styled.div`
   width: 100%;
@@ -77,7 +76,7 @@ function PostDetail() {
   useEffect(() => {
     const API_KEY = import.meta.env.VITE_API_KEY
 
-    fetch(`https://api.unsplash.com/photos/${id}?client_id=${API_KEY}`, {
+    fetch(`https://api.unsplash.com/photos/${id}`, {
       headers: {
         'Authorization': `Client-ID ${API_KEY}`
       }

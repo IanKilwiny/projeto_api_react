@@ -1,11 +1,10 @@
-import "../css/Post.css"
 import styled from "styled-components"
 import { useNavigate } from "react-router-dom"
 
  const Conteiner = styled.div`
   width: 100%;
   max-width: 31rem;
-  background-color: #1e1e1e;
+  background-color: #000000;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
@@ -25,6 +24,39 @@ import { useNavigate } from "react-router-dom"
   background-repeat: no-repeat;
   `
 
+
+  const ConteinerText = styled.div`
+    width: 100%;
+    margin-left: 10px;
+    font-size: large
+  `
+
+
+  const ConteinerDescription = styled.div`
+    width: 100%;
+    margin-left: 10px
+  `
+
+
+  const ConteinerUser = styled.div`
+    width: auto;
+    display:flex;
+    align-itens:left;
+    justify-content: flex-start;
+    gap: 10px;
+    max-width: 50%;
+    min-width: 30%;
+    overflow: hidden 
+  `
+
+  const ImageUser = styled.div`
+    width: 4rem;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 5px
+  `
+
 function Post({item}) {
 
   const navigate = useNavigate()
@@ -42,25 +74,34 @@ function Post({item}) {
           }}      
         />
 
-        <div>
+        <ConteinerText>
           <div>
             <p>{item.alt_description}</p>
           </div>
 
-          <div>
-            <p>❤️ {item.likes}</p>
-          </div>
+        </ConteinerText>
 
-          <div>
-            <p>👤 {item.user.username}</p>
-          </div>
-        </div>
+          <ConteinerDescription>
+          
+              <ConteinerUser>
+
+                <ImageUser style={{
+                  "backgroundImage":`url(${item.user.profile_image.small})`}}>
+                </ImageUser>
+               
+
+                <p>@{item.user.username}</p>
+              </ConteinerUser>
+      
+
+             <div>
+              <p>❤️ {item.likes}</p>
+             </div>
+          
+         </ConteinerDescription> 
        
 
    </Conteiner>
-
-   
-
 
   )
 }
