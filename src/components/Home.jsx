@@ -4,15 +4,25 @@ import styled from 'styled-components'
 
 
 const Conteiner = styled.div`
-    width: 100%;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    max-width: 1200px;
-    margin: 2rem auto; /* centraliza e cria espaço */
+  width: 100%;
+  max-width: 1400px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+
+  column-count: 4;
+  column-gap: 20px;
+
+  @media (max-width: 1200px) {
+    column-count: 3;
+  }
+
+  @media (max-width: 900px) {
+    column-count: 2;
+  }
+
+  @media (max-width: 600px) {
+    column-count: 1;
+  }
 `
 
 function Home() {
@@ -22,9 +32,10 @@ function Home() {
 
   useEffect(()=>{
 
-    fetch("https://api.unsplash.com/photos/",{
+    fetch("https://api.unsplash.com/photos?per_page=100",{
       headers:{
         "Authorization": `Client-ID ${API_KEY}`
+      
       }
     })
 

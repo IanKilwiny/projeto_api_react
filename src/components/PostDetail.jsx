@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { FiDownload } from 'react-icons/fi'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -14,6 +15,7 @@ const Container = styled.div`
 `
 
 const Card = styled.div`
+  position: relative; /* adicione isso */
   max-width: 800px;
   width: 100%;
   background-color: #1e1e1e;
@@ -67,6 +69,37 @@ const Button = styled.button`
   }
 `
 
+const DownloadButton = styled.a`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  animation: float 2s ease-in-out infinite;
+
+  &:hover {
+    background: #007bff;
+    transform: scale(1.1) rotate(-10deg);
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+    100% { transform: translateY(0px); }
+  }
+`
+
 function PostDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -106,6 +139,15 @@ function PostDetail() {
   return (
     <Container>
       <Card>
+        <DownloadButton 
+          href={post.links.download} 
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+        <FiDownload />
+      </DownloadButton>
+
+      
         <Image src={post.urls.regular} alt={post.alt_description} />
         <Content>
           <Title>{post.alt_description || 'Sem título'}</Title>
