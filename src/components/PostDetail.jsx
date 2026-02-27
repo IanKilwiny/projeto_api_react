@@ -1,109 +1,99 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { FiDownload } from 'react-icons/fi'
+import { FiArrowLeft } from 'react-icons/fi'
+import ProfileDetails from './ProfileDetails'
+import ImageWithDownload from './ImageWithDownload'
+import Footer from './Footer'
 import styled from 'styled-components'
+import Post from './Post'
 
-const Container = styled.div`
-  width: 100%;
+/* ================= ESTILOS ================= */
+
+const Page = styled.div`
+  background: #0f0f0f;
   min-height: 100vh;
-  background-color: #121212;
-  color: #fff;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
-const Card = styled.div`
-  position: relative; /* adicione isso */
-  max-width: 800px;
-  width: 100%;
-  background-color: #1e1e1e;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-`
-
-const Image = styled.img`
-  width: 100%;
-  height: 500px;
-  object-fit: cover;
-`
-
-const Content = styled.div`
-  padding: 30px;
-`
-
-const Title = styled.h1`
-  font-size: 24px;
-  margin-bottom: 15px;
-  color: #fff;
-`
-
-const Info = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  gap: 20px;
-  flex-wrap: wrap;
-
-  p {
-    margin: 10px 0;
-    font-size: 16px;
-  }
-`
-
-const Button = styled.button`
-  background-color: #007bff;
   color: white;
-  padding: 10px 20px;
+`
+
+const Header = styled.div`
+  background: #111;
+  padding: 15px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-bottom: 1px solid #222;
+`
+
+const BackButton = styled.button`
+  background: #007bff;
   border: none;
+  padding: 8px 14px;
   border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-top: 20px;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: #0056b3;
-  }
-`
-
-const DownloadButton = styled.a`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(6px);
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
+  color: white;
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 22px;
+  gap: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
-
-  animation: float 2s ease-in-out infinite;
+  font-weight: 500;
+  transition: 0.3s;
 
   &:hover {
-    background: #007bff;
-    transform: scale(1.1) rotate(-10deg);
-  }
-
-  @keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-6px); }
-    100% { transform: translateY(0px); }
+    background: #0056b3;
+    transform: translateY(-2px);
   }
 `
+
+const ProfileBanner = styled.div`
+  position: relative;
+  height: 300px;
+  background-image: url(${props => props.bg});
+  background-size: cover;
+  background-position: center;
+`
+
+const ProfileInfo = styled.div`
+  max-width: 1000px;
+  margin: -80px auto 0;
+  padding: 0 20px;
+  position: relative;
+`
+
+const Gallery = styled.div`
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 0 20px;
+
+  h2 {
+    margin-bottom: 20px;
+    grid-column: 1 / -1;
+  }
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+
+  img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+`
+
+/* ================= COMPONENTE ================= */
 
 function PostDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
+
   const [post, setPost] = useState(null)
+  const [otherPhotos, setOtherPhotos] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -111,63 +101,63 @@ function PostDetail() {
 
     fetch(`https://api.unsplash.com/photos/${id}`, {
       headers: {
-        'Authorization': `Client-ID ${API_KEY}`
+        Authorization: `Client-ID ${API_KEY}`
       }
     })
-      .then(response => {
-        if (!response.ok) throw new Error(`Erro ${response.status}`)
-        return response.json()
-      })
+      .then(res => res.json())
       .then(data => {
         setPost(data)
+
+        return fetch(
+          `https://api.unsplash.com/users/${data.user.username}/photos`,
+          {
+            headers: {
+              Authorization: `Client-ID ${API_KEY}`
+            }
+          }
+        )
+      })
+      .then(res => res.json())
+      .then(userPhotos => {
+        setOtherPhotos(userPhotos)
         setLoading(false)
       })
-      .catch(error => {
-        console.log('Erro na requisição: ' + error)
+      .catch(err => {
+        console.log(err)
         setLoading(false)
       })
   }, [id])
 
-  if (loading) {
-    return <Container><p>Carregando...</p></Container>
-  }
-
-  if (!post) {
-    return <Container><p>Post não encontrado</p></Container>
-  }
+  if (loading) return <Page>Carregando...</Page>
+  if (!post) return <Page>Post não encontrado</Page>
 
   return (
-    <Container>
-      <Card>
-        <DownloadButton 
-          href={post.links.download} 
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-        <FiDownload />
-      </DownloadButton>
+    <Page>
+      <Header>
+        <BackButton onClick={() => navigate('/')}>
+          <FiArrowLeft />
+          Voltar
+        </BackButton>
+      </Header>
 
-      
-        <Image src={post.urls.regular} alt={post.alt_description} />
-        <Content>
-          <Title>{post.alt_description || 'Sem título'}</Title>
-          
-          <Info>
-            <div>
-              <p><strong>❤️ Likes:</strong> {post.likes}</p>
-              <p><strong>👤 Usuário:</strong> {post.user.username}</p>
-              <p><strong>📍 Localização:</strong> {post.user.location || 'Não informada'}</p>
-            </div>
-            <div>
-              <p><strong>📸 Câmera:</strong> {post.exif?.model || 'Não informada'}</p>
-              <p><strong>🔗 Downloads:</strong> {post.downloads}</p>
-            </div>
-          </Info>
+      <ProfileBanner bg={post.urls.full} />
 
-          <Button onClick={() => navigate('/')}>← Voltar</Button>
-        </Content>
-      </Card>
-    </Container>
+      <ProfileInfo>
+        <ProfileDetails user={post.user} />
+
+        <ImageWithDownload src={post.urls.regular} downloadLink={post.links.download} />
+      </ProfileInfo>
+
+      <Gallery>
+        <h2>Outras Fotos</h2>
+        {otherPhotos.map(photo => (
+
+          <Post key={photo.id} item={photo} />
+        ))}
+      </Gallery>
+
+      <Footer />
+    </Page>
   )
 }
 
