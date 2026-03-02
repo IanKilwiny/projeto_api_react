@@ -107,11 +107,10 @@ A aplicação estará disponível em `http://localhost:5173`
 ### Obtenção da Chave de API do Unsplash
 
 1. Acesse [https://unsplash.com/developers](https://unsplash.com/developers)
-2. Clique em "Create an app"
-3. Aceite os termos de uso
-4. Preencha as informações do aplicativo
-5. Copie seu **Access Key**
-6. Crie um arquivo `.env.local` na raiz do projeto:
+2. Aceite os termos de uso
+3. Preencha as informações do aplicativo
+4. Copie seu **Access Key**
+5. Crie um arquivo `.env.local` na raiz do projeto:
 
 ```env
 VITE_API_KEY=sua_chave_aqui
@@ -158,16 +157,6 @@ fetch('https://api.unsplash.com/photos?page=1&per_page=20', {
 
 ---
 
-## 🗺️ Sistema de Rotas
-
-A aplicação utiliza **React Router DOM** para navegação entre páginas.
-
-### Rotas Disponíveis
-
-```
-/                    → Home (Galeria Principal)
-/photo/:id          → Detalhes da Foto
-```
 
 ### Configuração de Rotas
 
