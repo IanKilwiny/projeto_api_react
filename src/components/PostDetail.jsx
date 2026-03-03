@@ -86,7 +86,6 @@ const Gallery = styled.div`
   }
 `
 
-/* ================= COMPONENTE ================= */
 
 function PostDetail() {
   const { id } = useParams()
@@ -107,7 +106,7 @@ function PostDetail() {
       .then(res => res.json())
       .then(data => {
         setPost(data)
-
+        //guarda fotos do usuário para mostrar na galeria, usando o username do post atual
         return fetch(
           `https://api.unsplash.com/users/${data.user.username}/photos`,
           {
@@ -127,7 +126,7 @@ function PostDetail() {
         setLoading(false)
       })
   }, [id])
-
+  
   if (loading) return <Page>Carregando...</Page>
   if (!post) return <Page>Post não encontrado</Page>
 
@@ -145,7 +144,7 @@ function PostDetail() {
       <ProfileInfo>
         <ProfileDetails user={post.user} />
 
-        <ImageWithDownload src={post.urls.regular} downloadLink={post.links.download} />
+        <ImageWithDownload src={post.urls.regular} downloadLink={post.links.download} /> 
       </ProfileInfo>
 
       <Gallery>
